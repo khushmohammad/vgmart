@@ -5,7 +5,6 @@ import { Col } from "react-bootstrap";
 import Card from "react-bootstrap/Card";
 
 export function BasicCard({ data }: { data: vegetables }) {
-  console.log(data, "data");
   return (
     <Card>
       {/* <Image
@@ -25,6 +24,13 @@ export function BasicCard({ data }: { data: vegetables }) {
         <Card.Text className="d-flex justify-content-between">
           <b>Unit Per Price :</b> {data.unitPerPrice}
         </Card.Text>
+        {/* {data.unit === "unit" ? (
+          <Card.Text className="d-flex justify-content-between">
+            <b>Unit Per Price :</b> {data.unitPerPrice}
+          </Card.Text>
+        ) : (
+          ""
+        )} */}
         <Card.Text className="d-flex justify-content-between">
           <b>Quantity :</b> {data.quantity}
         </Card.Text>

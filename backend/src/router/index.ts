@@ -1,4 +1,3 @@
-import { crud } from "./crudRoute";
-import { user } from "./userRoute";
+import { vegetables } from "./vegetables";
 
-export { crud, user };
+export { vegetables };

@@ -1,10 +1,12 @@
 import { Request, Response } from "express";
+
+import { vegetables as vegItems } from "./../mock/vegetables-list.json";
+
 export const routTest = (req: Request, res: Response) => {
   res.send("Welcome to test route!");
   res.end();
 };
-export const userList = (req: Request, res: Response) => {
-  const param = JSON.stringify(req.query);
-  res.send("hello user controller is " + param);
+export const getVegList = (req: Request, res: Response) => {
+  res.json(vegItems);
   res.end();
 };
