@@ -15,7 +15,7 @@ export function BasicCard({ data }: { data: vegetables }) {
         className="img-fluid w-100"
         priority={true}
       /> */}
-      {/* {data._id} */}
+      {data._id}
       <Card.Body>
         <Card.Title className="text-success">{data.name} </Card.Title>
 

@@ -9,7 +9,7 @@ export const routTest = (req: Request, res: Response) => {
 export const getVegList = async (req: Request, res: Response) => {
   try {
     const vegetablesData = await vegetables.find();
-    req.app.emit("get-new-data", "get-data-api");
+
     res.json(vegetablesData);
   } catch (err) {
     console.log(err);
@@ -26,7 +26,8 @@ export const addVegItem = async (req: Request, res: Response) => {
   try {
     const vegetablesData = await vegetables.create(data);
 
-    socket.emit("get-new-data", "add-item-api");
+    socket.emit("get-new-data", "real time update");
+    socket.broadcast.emit("get-new-data", "real time update");
 
     res.json(vegetablesData);
   } catch (err) {
@@ -47,7 +48,8 @@ export const updateVegItem = async (req: Request, res: Response) => {
     const vegetablesData = await vegetables.findOneAndUpdate(filter, update, {
       returnOriginal: false,
     });
-    socket.emit("get-new-data", "update-item-api");
+    socket.emit("get-new-data", "real time update");
+    socket.broadcast.emit("get-new-data", "real time update");
     res.json(vegetablesData);
   } catch (err) {
     console.log(err);
@@ -62,7 +64,9 @@ export const deleteVegItem = async (req: Request, res: Response) => {
 
   try {
     const vegetablesData = await vegetables.deleteOne(filter);
-    socket.emit("get-new-data", "update-delete-api");
+    socket.emit("get-new-data", "real time update");
+    socket.broadcast.emit("get-new-data", "real time update");
+
     res.json(vegetablesData);
   } catch (err) {
     console.log(err);

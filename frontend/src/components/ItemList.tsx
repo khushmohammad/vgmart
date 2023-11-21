@@ -23,6 +23,7 @@ function ItemList() {
   useEffect(() => {
     socket.on("connect", onConnect);
     socket.on("disconnect", onDisconnect);
+
     return () => {
       socket.off("connect", onConnect);
       socket.off("disconnect", onDisconnect);
@@ -30,7 +31,6 @@ function ItemList() {
   }, []);
   useEffect(() => {
     socket.on("get-new-data", getItemsInCom);
-    console.log("object is connected");
   }, [socket]);
   //socket
   const getItemsInCom = async () => {
