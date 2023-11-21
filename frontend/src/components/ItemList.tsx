@@ -1,25 +1,57 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Row } from "react-bootstrap";
 import Item from "./Item";
-
 import NotFound from "./NotFound";
 import { vegetables } from "@/types/typeGroup";
 import Loading from "./Loading";
 import { getItems } from "@/services/utility";
-import useSWR from "swr";
+
+import { socket } from "./../services/socket";
 
 function ItemList() {
-  const { data, error, isLoading } = useSWR<vegetables[]>(
-    `/vegetables`,
-    getItems
-  );
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [data, setData] = useState<vegetables[]>([]);
+  // socket
+  const [isConnected, setIsConnected] = useState(socket.connected);
+  function onConnect() {
+    setIsConnected(true);
+  }
+  function onDisconnect() {
+    setIsConnected(false);
+  }
+
+  useEffect(() => {
+    socket.on("connect", onConnect);
+    socket.on("disconnect", onDisconnect);
+    return () => {
+      socket.off("connect", onConnect);
+      socket.off("disconnect", onDisconnect);
+    };
+  }, []);
+  useEffect(() => {
+    socket.on("get-new-data", getItemsInCom);
+    console.log("object is connected");
+  }, [socket]);
+  //socket
+  const getItemsInCom = async () => {
+    const res = await getItems(`/vegetables`);
+    setData(res);
+  };
+  useEffect(() => {
+    setIsLoading(true);
+    getItemsInCom();
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 100);
+  }, []);
 
   if (isLoading) {
     return <Loading />;
   }
-  if (!data || data.length === 0 || error) {
+  if (!data || data.length === 0) {
     return <NotFound Message="Items Not Found" />;
   }
+
   return (
     <Row>
       {data.map((item, index) => {
