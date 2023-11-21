@@ -1,9 +1,18 @@
 import { Router } from "express";
-import { routTest, getVegList } from "../controller/vegController";
+import {
+  routTest,
+  getVegList,
+  addVegItem,
+  updateVegItem,
+  deleteVegItem,
+} from "../controller/vegController";
 
 const router: Router = Router();
 
 router.get("/", routTest);
-router.get("/get/vegetables", getVegList);
+router.get("/vegetables", getVegList);
+router.post("/vegetables", addVegItem);
+router.patch("/vegetables/:id", updateVegItem);
+router.delete("/vegetables/:id", deleteVegItem);
 
 export const vegetables = router;

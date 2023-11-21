@@ -1,45 +1,28 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Row } from "react-bootstrap";
 import Item from "./Item";
 
 import NotFound from "./NotFound";
 import { vegetables } from "@/types/typeGroup";
-import axios from "axios";
 import Loading from "./Loading";
+import { getItems } from "@/services/utility";
+import useSWR from "swr";
 
 function ItemList() {
-  const [items, setItems] = useState<vegetables[]>([]);
-  const [loading, setLoading] = useState<boolean>(false);
+  const { data, error, isLoading } = useSWR<vegetables[]>(
+    `/vegetables`,
+    getItems
+  );
 
-  const getItems = async () => {
-    try {
-      setLoading(true);
-      // Simulate an API call
-      const response = await axios.get(
-        `${process.env.NEXT_PUBLIC_SERVICE_PATH}/get/vegetables`
-      );
-      const { data } = response;
-      setItems(data);
-      setLoading(false);
-    } catch (error) {
-      console.error("Error fetching items:", error);
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    getItems();
-  }, []);
-
-  if (loading) {
+  if (isLoading) {
     return <Loading />;
   }
-  if (!items || items.length === 0) {
+  if (!data || data.length === 0 || error) {
     return <NotFound Message="Items Not Found" />;
   }
   return (
     <Row>
-      {items.map((item, index) => {
+      {data.map((item, index) => {
         return (
           <React.Fragment key={index}>
             <Item item={item} />

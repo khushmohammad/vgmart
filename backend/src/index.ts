@@ -1,5 +1,6 @@
 import express, { Express, json } from "express";
 import { vegetables } from "./router";
+import "./db/connection";
 var cors = require("cors");
 
 const app: Express = express();
