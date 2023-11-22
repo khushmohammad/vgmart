@@ -74,3 +74,15 @@ export const deleteVegItem = async (req: Request, res: Response) => {
 
   res.end();
 };
+
+export const getByIdVegItem = async (req: Request, res: Response) => {
+  try {
+    const vegetablesData = await vegetables.findById(req.params.id);
+
+    res.json(vegetablesData);
+  } catch (err) {
+    console.log(err);
+  }
+
+  res.end();
+};

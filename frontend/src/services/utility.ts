@@ -21,3 +21,30 @@ export const addItem = async (data: vegetables) => {
     console.error("Error fetching items:", error);
   }
 };
+
+export const getItemById = async (url: string) => {
+  try {
+    const response = await axios.get(url);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching items:", error);
+  }
+};
+
+export const DeleteItemById = async (url: string) => {
+  try {
+    const response = await axios.delete(url);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching items:", error);
+  }
+};
+
+export const EditItemById = async (url: string, data: vegetables) => {
+  try {
+    const response = await axios.patch(url, data);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching items:", error);
+  }
+};

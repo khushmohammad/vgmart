@@ -4,7 +4,11 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { vegetables } from "@/types/typeGroup";
-import { addItem } from "@/services/utility";
+import { addItem, EditItemById, getItemById } from "@/services/utility";
+import Link from "next/link";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+
 //  price, unitPerPrice, quantity
 const schema = yup
   .object({
@@ -17,16 +21,48 @@ const schema = yup
   .required();
 
 function AddItem() {
+  const router = useRouter();
+
   const {
     register,
     handleSubmit,
     formState: { errors },
+    setValue,
   } = useForm({
     resolver: yupResolver(schema),
   });
 
-  const onSubmit = (data: vegetables) => addItem(data);
+  // edit
 
+  const [itemData, setItemDataById] = useState<vegetables>();
+  const [type, setType] = useState<string>();
+
+  const { itemId } = router.query;
+
+  const getData = async () => {
+    const res = await getItemById(`/vegetables/${itemId}`);
+    setItemDataById(res);
+  };
+
+  useEffect(() => {
+    itemId && getData();
+    itemId ? setType("Edit") : setType("Add");
+  }, [itemId]);
+  useEffect(() => {
+    if (itemData) {
+      setValue("name", itemData.name);
+      setValue("unit", itemData.unit);
+      setValue("quantity", itemData.quantity);
+      setValue("price", itemData.price);
+      setValue("unitPerPrice", itemData.unitPerPrice);
+    }
+  }, [itemData]);
+
+  const onSubmit = (data: vegetables) => {
+    type == "Edit"
+      ? EditItemById(`/vegetables/${itemId}`, data)
+      : addItem(data);
+  };
   return (
     <div>
       <Row>
@@ -37,7 +73,7 @@ function AddItem() {
                 <Form.Label>Name</Form.Label>
                 <Form.Control
                   {...register("name")}
-                  defaultValue="tomato"
+                  defaultValue={""}
                   type="Text"
                   placeholder=""
                 />
@@ -48,15 +84,10 @@ function AddItem() {
 
               <Form.Group className="mb-3" as={Col} sm={6}>
                 <Form.Label>Unit</Form.Label>
-                <Form.Select {...register("unit")} defaultValue="kg">
+                <Form.Select {...register("unit")} defaultValue={"kg"}>
                   <option value="kg">Kg</option>
                   <option value="dozen">Dozen</option>
                 </Form.Select>
-                {/* <Form.Control
-                  {...register("unit")}
-                  type="text"
-                  defaultValue="kg"
-                /> */}
                 <div className="invalid-feedback d-block">
                   {errors.unit?.message}
                 </div>
@@ -99,8 +130,18 @@ function AddItem() {
             </Form.Group>
 
             <Button variant="success" type="submit">
-              Add Item
+              {type === "Edit" ? "Edit Item" : " Add Item"}
             </Button>
+            <Link href="/">
+              {" "}
+              <Button
+                variant="danger"
+                onClick={() => router.back()}
+                className="mx-5"
+              >
+                Back
+              </Button>
+            </Link>
           </Form>
         </Col>
       </Row>

@@ -1,20 +1,17 @@
+import { DeleteItemById } from "@/services/utility";
 import { vegetables } from "@/types/typeGroup";
+import Link from "next/link";
 
 import React from "react";
-import { Col } from "react-bootstrap";
+import { Button, Col } from "react-bootstrap";
 import Card from "react-bootstrap/Card";
 
 export function BasicCard({ data }: { data: vegetables }) {
+  const deleteItem = async () => {
+    await DeleteItemById(`/vegetables/${data._id}`);
+  };
   return (
     <Card>
-      {/* <Image
-        src="/images/dummy.jpg"
-        height={100}
-        width={100}
-        alt="dummy"
-        className="img-fluid w-100"
-        priority={true}
-      /> */}
       {data._id}
       <Card.Body>
         <Card.Title className="text-success">{data.name} </Card.Title>
@@ -25,17 +22,18 @@ export function BasicCard({ data }: { data: vegetables }) {
         <Card.Text className="d-flex justify-content-between">
           <b>Unit Per Price :</b> {data.unitPerPrice}
         </Card.Text>
-        {/* {data.unit === "unit" ? (
-          <Card.Text className="d-flex justify-content-between">
-            <b>Unit Per Price :</b> {data.unitPerPrice}
-          </Card.Text>
-        ) : (
-          ""
-        )} */}
+
         <Card.Text className="d-flex justify-content-between">
           <b>Quantity :</b> {data.quantity}
         </Card.Text>
-        {/* <Button variant="primary">Go somewhere</Button> */}
+        <Link href={`edit-item/${data._id}`}>
+          <Button variant="primary" className="me-2">
+            Edit{" "}
+          </Button>
+        </Link>
+        <Button variant="danger" className="ms-2" onClick={deleteItem}>
+          Delete{" "}
+        </Button>
       </Card.Body>
     </Card>
   );
