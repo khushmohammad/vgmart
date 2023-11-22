@@ -1,13 +1,15 @@
 import AddItem from "@/components/AddItem";
+import AuthContext from "@/context/AuthContext";
 import Layout from "@/Layout/Layout";
-import React from "react";
 
 function AddItemPage() {
   return (
     <div>
-      <Layout>
-        <AddItem />
-      </Layout>
+      <AuthContext>
+        <Layout>
+          <AddItem />
+        </Layout>
+      </AuthContext>
     </div>
   );
 }

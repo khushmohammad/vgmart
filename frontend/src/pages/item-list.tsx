@@ -1,14 +1,16 @@
 import ItemList from "@/components/ItemList";
-import Navigation from "@/components/Navigation";
+import AuthContext from "@/context/AuthContext";
 import Layout from "@/Layout/Layout";
 import React from "react";
 
 function ItemListPage() {
   return (
     <div>
-      <Layout>
-        <ItemList />
-      </Layout>
+      <AuthContext>
+        <Layout>
+          <ItemList />
+        </Layout>
+      </AuthContext>
     </div>
   );
 }

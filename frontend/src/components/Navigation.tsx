@@ -1,9 +1,13 @@
 import Link from "next/link";
+import React, { useContext } from "react";
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
+import { UserContext } from "@/context/AuthContext";
 
 function Navigation() {
+  const { isAdmin, currentUser } = useContext(UserContext);
+
   return (
     <Navbar collapseOnSelect expand="lg" className="bg-success">
       <Container>
@@ -26,18 +30,22 @@ function Navigation() {
                 Item List
               </Link>
             </Nav.Item>
-            <Nav.Item>
-              <Link className="text-light nav-link" href={"/add-item"}>
-                Add Item
-              </Link>
+
+            {isAdmin ? (
+              <Nav.Item>
+                <Link className="text-light nav-link" href={"/add-item"}>
+                  Add Item
+                </Link>
+              </Nav.Item>
+            ) : (
+              ""
+            )}
+          </Nav>
+          <Nav>
+            <Nav.Item className="text-light">
+              Login As : {currentUser?.toUpperCase()}
             </Nav.Item>
           </Nav>
-          {/* <Nav>
-            <Nav.Link href="#deets">More deets</Nav.Link>
-            <Nav.Link eventKey={2} href="#memes">
-              Dank memes
-            </Nav.Link>
-          </Nav> */}
         </Navbar.Collapse>
       </Container>
     </Navbar>

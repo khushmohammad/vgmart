@@ -1,12 +1,15 @@
+import { UserContext } from "@/context/AuthContext";
 import { DeleteItemById } from "@/services/utility";
 import { vegetables } from "@/types/typeGroup";
 import Link from "next/link";
 
-import React from "react";
+import React, { useContext } from "react";
 import { Button, Col } from "react-bootstrap";
 import Card from "react-bootstrap/Card";
 
 export function BasicCard({ data }: { data: vegetables }) {
+  const { isAdmin } = useContext(UserContext);
+
   const deleteItem = async () => {
     await DeleteItemById(`/vegetables/${data._id}`);
   };
@@ -26,14 +29,18 @@ export function BasicCard({ data }: { data: vegetables }) {
         <Card.Text className="d-flex justify-content-between">
           <b>Quantity :</b> {data.quantity}
         </Card.Text>
-        <Link href={`edit-item/${data._id}`}>
-          <Button variant="primary" className="me-2">
-            Edit{" "}
-          </Button>
-        </Link>
-        <Button variant="danger" className="ms-2" onClick={deleteItem}>
-          Delete{" "}
-        </Button>
+        {isAdmin && (
+          <>
+            <Link href={`edit-item/${data._id}`}>
+              <Button variant="success" className="me-2">
+                Edit{" "}
+              </Button>
+            </Link>
+            <Button variant="danger" className="ms-2" onClick={deleteItem}>
+              Delete{" "}
+            </Button>
+          </>
+        )}
       </Card.Body>
     </Card>
   );

@@ -1,15 +1,16 @@
 import Navigation from "@/components/Navigation";
+import AuthContext from "@/context/AuthContext";
 import React, { ReactElement } from "react";
 import { Container } from "react-bootstrap";
 
 function Layout({ children }: { children: ReactElement }) {
   return (
-    <div>
+    <AuthContext>
       <Navigation />
       <div className="py-5">
         <Container>{children}</Container>
       </div>
-    </div>
+    </AuthContext>
   );
 }
 
