@@ -7,14 +7,15 @@ import {
   deleteVegItem,
   getByIdVegItem,
 } from "../controller/vegController";
+import { checkIsAdmin } from "../middleware/auth";
 
 const router: Router = Router();
 
 router.get("/", routTest);
-router.get("/vegetables", getVegList);
-router.post("/vegetables", addVegItem);
-router.patch("/vegetables/:id", updateVegItem);
-router.delete("/vegetables/:id", deleteVegItem);
-router.get("/vegetables/:id", getByIdVegItem);
+router.get("/vegetables", checkIsAdmin, getVegList);
+router.post("/vegetables", checkIsAdmin, addVegItem);
+router.patch("/vegetables/:id", checkIsAdmin, updateVegItem);
+router.delete("/vegetables/:id", checkIsAdmin, deleteVegItem);
+router.get("/vegetables/:id", checkIsAdmin, getByIdVegItem);
 
 export const vegetables = router;
